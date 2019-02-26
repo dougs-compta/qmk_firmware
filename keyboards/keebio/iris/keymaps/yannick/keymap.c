@@ -7,34 +7,43 @@ extern keymap_config_t keymap_config;
 #define _RAISE 2
 #define _ARROWS 3
 #define _MOUSE 4
+#define _MACROS 5
 
 enum custom_keycodes {
   QWERTY = SAFE_RANGE,
   LOWER,
-  RAISE
+  RAISE,
+  MACRO,
+  M_TRANS,
+  M_MAIL,
+  M_SIGN,
+  M_COMMIT,
+  COPYPASTE
 };
 
 const uint16_t PROGMEM fn_actions[] = {
       [0] = ACTION_LAYER_TAP_KEY(_ARROWS, KC_F),    //Hold for momentary Arrows layer, Tap for F,
-      [1] = ACTION_LAYER_TAP_KEY(_MOUSE, KC_D)      //Hold for momentary Mouse layer, Tap for D
+      [1] = ACTION_LAYER_TAP_KEY(_MOUSE, KC_D),      //Hold for momentary Mouse layer, Tap for D
+      [2] = ACTION_LAYER_TAP_KEY(_LOWER, KC_SPC)      //Hold for momentary custom layer, Tap for Space
    };
 
 #define F_ARWS FUNC(0)
 #define D_MSE FUNC(1)
+#define SPC_L FUNC(2)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [_QWERTY] = LAYOUT(
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
-     KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                               KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_BSPC,
+     KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                               KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
      KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                               KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
-CTL_T(KC_ESC),KC_A,    KC_S,    D_MSE,   F_ARWS,  KC_G,                               KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,
+CTL_T(KC_ESC),KC_A,    KC_S,    D_MSE,   F_ARWS,  KC_G,                               KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, CTL_T(KC_QUOT),
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_LEAD,         KC_BSPC,  KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_ENT,
+     KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    COPYPASTE,       MACRO,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_ENT,
   //└────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
-                                    KC_LGUI, KC_SPC,  LOWER,                     RAISE,   SFT_T(KC_SPC), KC_LALT
+                                    KC_LGUI, SPC_L,   LOWER,                     RAISE,   SFT_T(KC_SPC), KC_LALT
                                 // └────────┴────────┴────────┘                 └────────┴────────┴────────┘
   ),
 
@@ -92,6 +101,20 @@ CTL_T(KC_ESC),KC_A,    KC_S,    D_MSE,   F_ARWS,  KC_G,                         
   //└────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
                                     _______, _______, _______,                   _______, _______, _______
                                 // └────────┴────────┴────────┘                 └────────┴────────┴────────┘
+  ),
+
+  [_MACROS] = LAYOUT(
+  //┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
+     _______, _______, M_MAIL,  _______, _______, _______,                            _______, _______, _______, _______, _______, _______,
+  //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
+     _______, _______, _______, _______, _______, M_TRANS,                            _______, _______, _______, _______, _______, _______,
+  //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
+     _______, _______, M_SIGN,  _______, _______, _______,                            _______, _______, _______, _______, _______, _______,
+  //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
+     _______, _______, _______, M_COMMIT,_______, _______, _______,          _______, _______, _______, _______,_______, _______, _______,
+  //└────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
+                                    _______, _______, _______,                   _______, _______, _______
+                                // └────────┴────────┴────────┘                 └────────┴────────┴────────┘
   )
 };
 
@@ -112,6 +135,42 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         layer_off(_RAISE);
       }
       return false;
+      break;
+    case MACRO:
+      if (record->event.pressed) {
+        layer_on(_MACROS);
+      } else {
+        layer_off(_MACROS);
+      }
+      return false;
+      break;
+    case M_TRANS:
+      if (record->event.pressed) {
+          SEND_STRING("transaction: options.transaction");
+      }
+      return false;
+      break;
+    case M_MAIL:
+      if (record->event.pressed) {
+          SEND_STRING("yannick.novella@gmail.com");
+      } 
+      break;
+    case M_SIGN:
+      if (record->event.pressed) {
+          SEND_STRING("N'hésitez pas à revenir vers moi si vous avez d'autres questions.\nBonne journée !");
+      }
+      break;
+    case M_COMMIT:
+      if (record->event.pressed) {
+          SEND_STRING("git commit -am ''" SS_TAP(X_LEFT));
+      }
+      break;
+    case COPYPASTE:
+      if (record->event.pressed) {
+          SEND_STRING(SS_LGUI("c"));
+      } else {
+          SEND_STRING(SS_LGUI("v"));
+      }
       break;
   }
   return true;
