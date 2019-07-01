@@ -3,9 +3,10 @@
 extern keymap_config_t keymap_config;
 
 #define _QWERTY 0
-#define _LOWER 1
-#define _RAISE 2
-#define _ARROWS 3
+#define _WINDOWS 1
+#define _LOWER 2
+#define _RAISE 3
+#define _ARROWS 4
 
 enum custom_keycodes {
   QWERTY = SAFE_RANGE,
@@ -24,7 +25,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [_QWERTY] = LAYOUT(
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
-     KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                               KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINUS,
+     KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                               KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    WINDOWS,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
      KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                               KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSLS,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
@@ -38,7 +39,7 @@ CTL_T(KC_ESC),KC_A,    KC_S,    KC_D,    F_ARWS,  KC_G,                         
 
   [_WINDOWS] = LAYOUT(
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
-     KC_ESC,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                               KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINUS,
+     KC_ESC,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                               KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    QWERTY,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
      KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                               KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSLS,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
@@ -95,6 +96,18 @@ CTL_T(KC_ESC),KC_A,    KC_S,    KC_D,    F_ARWS,  KC_G,                         
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
+    case QWERTY:
+      if (record->event.pressed) {
+        set_single_persistent_default_layer(_QWERTY);
+      }
+      return false;
+		break;
+		case WINDOWS:
+      if (record->event.pressed) {
+        set_single_persistent_default_layer(_WINDOWS);
+      }
+      return false;
+		break;
     case LOWER:
       if (record->event.pressed) {
         layer_on(_LOWER);
